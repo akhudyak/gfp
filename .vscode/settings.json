@@ -1,0 +1,6 @@
+{
+    "python.linting.enabled": false,
+    "python.analysis.extraPaths": [
+        "./code/sensors_icd"
+    ]
+}

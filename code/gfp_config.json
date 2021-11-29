@@ -1,0 +1,16 @@
+{
+  "Detectors": [
+    {
+      "Name": "AcousticDetector",
+      "IP": "127.0.0.1",
+      "port": 8000
+    },
+    {
+      "Name": "OpticDetector",
+      "IP": "127.0.0.1",
+      "port": 8000
+    }
+  ],
+  "DefaultTemperature": 25,
+  "MsgsFrameSizeSeconds": 2
+}
