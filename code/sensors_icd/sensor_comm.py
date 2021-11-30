@@ -27,14 +27,17 @@ class SensorComm():
         while True:
             msg_recieved = connection.recvfrom(self.msg_buffer_size)[0]
             msg = FireEventsMsg.from_bytes_array(msg_recieved, 0)
-            print(f"recieved msg {msg.header.message_seq_number}")
+            print(f"recieved msg {Opcode(msg.header.opcode)} {msg.header.message_seq_number} {msg.events_time_ms}")
             self.events_manager.add_fire_msg(msg)
 
        
 if __name__ == "__main__":
 
     events_manager = EventsManager(2000)
-    server = SensorComm("server", '192.168.0.79', 65432, FireEventsMsg.my_size(), events_manager)
-    server.start()
+    eas_server = SensorComm("server", '172.28.20.52', 65432, FireEventsMsg.my_size(), events_manager)
+    optic_server = SensorComm("server", '172.28.20.52', 65433, FireEventsMsg.my_size(), events_manager)
+
+    eas_server.start()
+    optic_server.start()
     time.sleep(1000)
     

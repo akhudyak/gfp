@@ -35,6 +35,7 @@ class EventsManager():
       self.keys_list = []
       self.slot_time_ms = slot_time_ms
       self.msgs_dictionary = {}
+      self.msgs_slots_list = []
 
     def add_fire_msg(self, new_msg):
       time = int(new_msg.events_time_ms / self.slot_time_ms)
@@ -42,31 +43,17 @@ class EventsManager():
       if time not in self.msgs_dictionary.keys():
             msgs_container = MsgsContainer(new_msg.events_time_ms*1000)
             self.msgs_dictionary[time] = msgs_container
+            self.msgs_slots_list.append(time)
             print(f"create MsgsContainer:{time}")
 
       if new_msg.header.opcode == Opcode.ACOUSTIC_MSG:
         self.msgs_dictionary[time].add_eas_msg(new_msg)
-        print(f"add eas msg:{new_msg.header.opcode}")
+        print(f"add eas msg:{new_msg.events_time_ms}")
       else:
         if new_msg.header.opcode == Opcode.OPTICAL_MSG:
           self.msgs_dictionary[time].add_optic_msg(new_msg)
-          print(f"add optical msg:{new_msg.header.opcode}")
+          print(f"add optical msg:{new_msg.events_time_ms}")
           
       self.lock.release()
 
-
-    def add_eas_msg(self, new_msg):
-      time = int(new_msg.events_time_ms / self.slot_time_ms)
-      if time not in self.msgs_dictionary.keys():
-            msgs_container = MsgsContainer(time)
-            self.msgs_dictionary[time] = msgs_container
-
-      self.msgs_dictionary[time].add_eas_msg(new_msg)
-
-    def add_optic_msg(self, new_msg):
-      time = int(new_msg.events_time_ms / self.slot_time_ms)
-      if time not in self.msgs_dictionary.keys():
-            msgs_container = MsgsContainer(time)
-            self.msgs_dictionary[time] = msgs_container
-
-      self.msgs_dictionary[time].add_optic_msg(new_msg)
+    
